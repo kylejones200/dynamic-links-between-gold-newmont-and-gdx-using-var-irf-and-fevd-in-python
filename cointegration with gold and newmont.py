@@ -161,7 +161,7 @@ def get_data():
 data = get_data()
 logging.info(data.head())
 
-start_date = '2020-01-01'  # not ’2020–01–01’
+start_date = '2020-01-01'  # not '2020-01-01'
 
 nem = yf.download('NEM', start=start_date, end=datetime.now(), auto_adjust=False)
 logging.info(nem.head())
@@ -270,9 +270,9 @@ plt.grid(False)
 plt
 
 start_date = datetime.now()-pd.DateOffset(years=5)
-  end_date = datetime.now()
+end_date = datetime.now()
 
-  GDX = yf.download('GDX', start=start_date, end=end_date, auto_adjust=False)
+GDX = yf.download('GDX', start=start_date, end=end_date, auto_adjust=False)
   #gold = yf.download('GC=F', start=start_date, end=end_date, auto_adjust=False)
 
 gold
@@ -283,11 +283,11 @@ data = pd.DataFrame({
     })
 
 # Extract 'Close' prices and align by date
-    GDX_close = GDX[['Close']].rename(columns={'Close': 'GDX'})
-    gold_close = gold[['Close']].rename(columns={'Close': 'Gold'})
+GDX_close = GDX[['Close']].rename(columns={'Close': 'GDX'})
+gold_close = gold[['Close']].rename(columns={'Close': 'Gold'})
 
     # Join on index (dates), keeping only rows where both have data
-    data = data.join(GDX_close, how='inner')
+data = data.join(GDX_close, how='inner')
 
 data.head()
 

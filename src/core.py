@@ -65,14 +65,14 @@ def plot_cumulative_irf(irf, fitted_model, shock_var: str, response_vars: list,
     plt.close()
 
 def plot_irf(irf, output_path: Path):
- """Plot standard IRF """
+    """Plot standard IRF """
     irf.plot(orth=False)
     plt.tight_layout()
     plt.savefig(output_path, dpi=100, bbox_inches='tight', facecolor='white')
     plt.close()
 
 def plot_fevd(fevd, output_path: Path):
- """Plot FEVD """
+    """Plot FEVD """
     fevd.plot()
     plt.tight_layout()
     plt.savefig(output_path, dpi=100, bbox_inches='tight', facecolor='white')
