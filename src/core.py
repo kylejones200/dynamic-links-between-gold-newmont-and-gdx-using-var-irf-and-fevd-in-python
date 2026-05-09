@@ -43,7 +43,7 @@ def fit_var_model(data: pd.DataFrame, max_lag: int = 12) -> Tuple[VAR, any]:
 
 def plot_cumulative_irf(irf, fitted_model, shock_var: str, response_vars: list,
                         periods: int, output_path: Path):
- """Plot cumulative impulse response functions """
+    """Plot cumulative impulse response functions """
     fig, axes = plt.subplots(len(response_vars), 1, figsize=(10, 4 * len(response_vars)), sharex=True)
     
     if len(response_vars) == 1:
