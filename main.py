@@ -37,22 +37,22 @@ def main():
     output_dir = Path(args.output_dir) if args.output_dir else Path(config['output']['figures_dir'])
     output_dir.mkdir(exist_ok=True)
     
-        df = fetch_yfinance_data(
-        config['data']['tickers'],
-        config['data']['start_date'],
-        config['data']['end_date']
+    df = fetch_yfinance_data(
+    config['data']['tickers'],
+    config['data']['start_date'],
+    config['data']['end_date']
     )
     df.columns = config['data']['column_names']
     
-        log_returns = compute_log_returns(df, config['data']['resample_freq'])
+    log_returns = compute_log_returns(df, config['data']['resample_freq'])
     
-        for col in log_returns.columns:
+    for col in log_returns.columns:
         result = test_stationarity(log_returns[col], col)
         logging.info(f"{col}: p-value = {result['p_value']:.4f}, "
              f"Stationary: {result['is_stationary']}")
     
     if config['analysis']['granger_causality']['enabled']:
-                for test in config['analysis']['granger_causality']['test_pairs']:
+        for test in config['analysis']['granger_causality']['test_pairs']:
             logging.info(f"\n{test['description']}")
             try:
                 test_data = log_returns[[test['y'], test['x']]].dropna()
@@ -69,13 +69,13 @@ def main():
     
         logging.info(fitted_model.resid.corr())
     
-                irf = fitted_model.irf(config['analysis']['irf']['periods'])
+        irf = fitted_model.irf(config['analysis']['irf']['periods'])
         plot_irf(irf, output_dir / 'irf_plot.png')
     
-                fevd = fitted_model.fevd(config['analysis']['fevd']['periods'])
+        fevd = fitted_model.fevd(config['analysis']['fevd']['periods'])
         plot_fevd(fevd, output_dir / 'fevd_plot.png')
     
-                plot_cumulative_irf(
+        plot_cumulative_irf(
             irf,
             fitted_model,
             config['output']['cumulative_irf_shock'],
