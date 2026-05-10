@@ -545,22 +545,23 @@ plt.grid(False)
 plt.tight_layout()
 plt.show()
 
-def plot_fevd_stacked(fevd, target_var, labels=None):
+def plot_fevd_stacked(fevd, target_var, labels=None, plot: bool = False):
     import matplotlib.pyplot as plt
 
     idx = fitted_model.names.index(target_var)
     decomp = fevd.decomp[:, idx, :]  # shape: (time, sources)
     months = np.arange(1, decomp.shape[0] + 1)
 
-    plt.figure(figsize=(10, 6))
-    plt.stackplot(months, decomp.T, labels=labels or fitted_model.names)
-    plt.title(f"FEVD - Stacked Area Chart: {target_var}")
-    plt.xlabel("Months Ahead")
-    plt.ylabel("Fraction of Variance")
-    plt.legend(loc='upper right')
-    plt.grid(False)
-    plt.tight_layout()
-    plt.show()
+    if plot:
+        plt.figure(figsize=(10, 6))
+        plt.stackplot(months, decomp.T, labels=labels or fitted_model.names)
+        plt.title(f"FEVD - Stacked Area Chart: {target_var}")
+        plt.xlabel("Months Ahead")
+        plt.ylabel("Fraction of Variance")
+        plt.legend(loc='upper right')
+        plt.grid(False)
+        plt.tight_layout()
+        plt.show()
 
 plot_fevd_stacked(fevd, 'GDX_GDX', labels=['From NEM', 'From Gold', 'From GDX'])
 plot_fevd_stacked(fevd, 'Gold_GC=F', labels=['From NEM', 'From Gold', 'From GDX'])

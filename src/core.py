@@ -44,25 +44,26 @@ def fit_var_model(data: pd.DataFrame, max_lag: int = 12) -> Tuple[VAR, any]:
 def plot_cumulative_irf(irf, fitted_model, shock_var: str, response_vars: list,
                         periods: int, output_path: Path):
     """Plot cumulative impulse response functions """
-    fig, axes = plt.subplots(len(response_vars), 1, figsize=(10, 4 * len(response_vars)), sharex=True)
+                        if plot:
+        fig, axes = plt.subplots(len(response_vars), 1, figsize=(10, 4 * len(response_vars)), sharex=True)
     
-    if len(response_vars) == 1:
-        axes = [axes]
+        if len(response_vars) == 1:
+            axes = [axes]
     
-    shock_idx = fitted_model.names.index(shock_var)
+        shock_idx = fitted_model.names.index(shock_var)
     
-    for i, var in enumerate(response_vars):
-        var_idx = fitted_model.names.index(var)
-        irf_plot = irf.cum_effects[:, shock_idx, var_idx]
+        for i, var in enumerate(response_vars):
+            var_idx = fitted_model.names.index(var)
+            irf_plot = irf.cum_effects[:, shock_idx, var_idx]
         
-        axes[i].plot(range(periods + 1), irf_plot, color="#4A90A4", linewidth=1.2)
-        axes[i].set_ylabel("Response")
-        axes[i].legend([f'{shock_var} → {var}'], loc='best')
+            axes[i].plot(range(periods + 1), irf_plot, color="#4A90A4", linewidth=1.2)
+            axes[i].set_ylabel("Response")
+            axes[i].legend([f'{shock_var} → {var}'], loc='best')
     
-    axes[-1].set_xlabel("Months")
+        axes[-1].set_xlabel("Months")
     
-    plt.savefig(output_path, dpi=100, bbox_inches="tight")
-    plt.close()
+        plt.savefig(output_path, dpi=100, bbox_inches="tight")
+        plt.close()
 
 def plot_irf(irf, output_path: Path):
     """Plot standard IRF """
