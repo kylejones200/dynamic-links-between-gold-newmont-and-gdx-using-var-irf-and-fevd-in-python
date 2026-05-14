@@ -131,14 +131,6 @@ logging.info(f"NEM daily volatility: {data['NEM'].pct_change().std() * 100:.2f}%
 logging.info(f"Gold daily volatility: {data['Gold'].pct_change().std() * 100:.2f}%")
 logging.info(f"Correlation coefficient: {correlation.iloc[0,1]:.4f}")
 
-import yfinance as yf
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller, grangercausalitytests
-from statsmodels.tsa.api import VAR
-from statsmodels.stats.stattools import durbin_watson
-from datetime import datetime
 
 def get_data():
     # Explicitly specify auto_adjust=False
@@ -167,14 +159,6 @@ nem = yf.download('NEM', start=start_date, end=datetime.now(), auto_adjust=False
 logging.info(nem.head())
 logging.info(nem.columns)
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller, grangercausalitytests
-from statsmodels.tsa.api import VAR
-from statsmodels.stats.stattools import durbin_watson
-import yfinance as yf
-from datetime import datetime
 
 def get_data():
     # Use only ASCII hyphens in your date string!
@@ -200,14 +184,6 @@ def get_data():
 data = get_data()
 logging.info("Head of data:\n", data.head())
 
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller, grangercausalitytests
-from statsmodels.tsa.api import VAR
-from statsmodels.stats.stattools import durbin_watson
-import yfinance as yf
-from datetime import datetime
 
 def get_data():
     start_date = datetime.now()-pd.DateOffset(years=5)
@@ -458,11 +434,6 @@ plt.grid(False)
 plt.tight_layout()
 plt.show()
 
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from statsmodels.tsa.api import VAR
-from statsmodels.tsa.stattools import adfuller, grangercausalitytests
 
 # --- Step 1: Resample to Monthly and Compute Log Returns ---
 
@@ -523,7 +494,6 @@ ax.set_title("Forecast Error Variance Decomposition of GDX", fontsize=14)
 plt.tight_layout()
 plt.show()
 
-import matplotlib.pyplot as plt
 
 fevd = fitted_model.fevd(12)
 
@@ -546,7 +516,6 @@ plt.tight_layout()
 plt.show()
 
 def plot_fevd_stacked(fevd, target_var, labels=None, plot: bool = False):
-    import matplotlib.pyplot as plt
 
     idx = fitted_model.names.index(target_var)
     decomp = fevd.decomp[:, idx, :]  # shape: (time, sources)
@@ -581,8 +550,6 @@ for target in ['NEM_NEM', 'Gold_GC=F', 'GDX_GDX']:
     plt.tight_layout()
     plt.show()
 
-import numpy as np
-import matplotlib.pyplot as plt
 
 # Compute IRF and extract orthogonalized impulse responses
 irf = fitted_model.irf(12)
