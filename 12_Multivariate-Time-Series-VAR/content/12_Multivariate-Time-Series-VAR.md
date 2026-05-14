@@ -10,21 +10,21 @@ Vector Autoregression (VAR) models multiple time series simultaneously, capturin
 We combine consumption, production, and emissions data into a multivariate series.
 
 
-The multivariate dataset captures relationships between consumption, production, and emissions. After aligning the three series, we obtain **54 annual observations from 1970–2023**, with summary statistics:
+The multivariate dataset captures relationships between consumption, production, and emissions. After aligning the three series, we obtain 54 annual observations from 1970–2023, with summary statistics:
 
-- **Consumption**: mean ≈ 20.4M, ranging from 14.2M to 24.8M units  
-- **Production**: mean ≈ 7.1M, ranging from 4.51M to 8.65M units  
-- **Emissions**: mean ≈ 946, ranging from 410.7 to 1,569.7 million metric tons  
+- Consumption: mean ≈ 20.4M, ranging from 14.2M to 24.8M units  
+- Production: mean ≈ 7.1M, ranging from 4.51M to 8.65M units  
+- Emissions: mean ≈ 946, ranging from 410.7 to 1,569.7 million metric tons  
 
-The three series are also strongly correlated at the residual level: consumption and production residuals have a correlation of about **0.95**, while emissions are more weakly correlated with the other two.
+The three series are also strongly correlated at the residual level: consumption and production residuals have a correlation of about 0.95, while emissions are more weakly correlated with the other two.
 
 ### VAR Model
 VAR models each variable as a function of its own lags and lags of other variables.
 
 
-VAR captures cross-variable dependencies through lagged relationships. Before fitting, we difference the series to address non-stationarity; Augmented Dickey–Fuller tests on the original levels yield **p-values above 0.24** for all three variables, indicating that a simple VAR in levels would be inappropriate.
+VAR captures cross-variable dependencies through lagged relationships. Before fitting, we difference the series to address non-stationarity; Augmented Dickey–Fuller tests on the original levels yield p-values above 0.24 for all three variables, indicating that a simple VAR in levels would be inappropriate.
 
-On the differenced data, the information criteria select a **lag order of 0** for this particular specification. That means most of the structure is captured by level shifts rather than additional lags, and the model effectively behaves like a multivariate mean model with a rich residual covariance structure.
+On the differenced data, the information criteria select a lag order of 0 for this particular specification. That means most of the structure is captured by level shifts rather than additional lags, and the model effectively behaves like a multivariate mean model with a rich residual covariance structure.
 
 ### Cointegration Testing
 Cointegration tests whether variables have long-run relationships.

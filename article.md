@@ -9,7 +9,7 @@ canonical_link: "https://medium.com/@kyle-t-jones/dynamic-links-between-gold-new
 
 This project uses vector autoregressive models and Granger causality to examine the relationship between the price of gold futures (GC=F)...
 
-### **Dynamic Links Between Gold, Newmont, and GDX Using VAR, IRF, and** FEVD **in Python**
+### Dynamic Links Between Gold, Newmont, and GDX Using VAR, IRF, and FEVD in Python
 This project uses vector autoregressive models and Granger causality to examine the relationship between the price of gold futures (GC=F), Newmont Mining Corporation (NEM), and the VanEck Gold Miners ETF (GDX). My hypothesis is that the price of gold causes changes in the stock price for NEM and GDX.
 
 I used daily data for the five years from Yahoo Finance.
