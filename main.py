@@ -67,15 +67,15 @@ def main():
     logging.info(f"\nVAR Model Summary (Selected Lag: {fitted_model.k_ar}):")
     logging.info(fitted_model.summary())
     
-        logging.info(fitted_model.resid.corr())
+logging.info(fitted_model.resid.corr())
     
-        irf = fitted_model.irf(config['analysis']['irf']['periods'])
-        plot_irf(irf, output_dir / 'irf_plot.png')
+irf = fitted_model.irf(config['analysis']['irf']['periods'])
+plot_irf(irf, output_dir / 'irf_plot.png')
     
-        fevd = fitted_model.fevd(config['analysis']['fevd']['periods'])
-        plot_fevd(fevd, output_dir / 'fevd_plot.png')
+fevd = fitted_model.fevd(config['analysis']['fevd']['periods'])
+plot_fevd(fevd, output_dir / 'fevd_plot.png')
     
-        plot_cumulative_irf(
+plot_cumulative_irf(
             irf,
             fitted_model,
             config['output']['cumulative_irf_shock'],
@@ -84,7 +84,7 @@ def main():
             output_dir / 'cumulative_irf_gold_shocks.png'
         )
     
-    logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
+logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
 
 if __name__ == "__main__":
     main()
