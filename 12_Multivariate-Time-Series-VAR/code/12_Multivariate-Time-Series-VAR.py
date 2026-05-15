@@ -48,7 +48,7 @@ var_data = pd.DataFrame({
 
 logger.info(f"Multivariate series length: {len(var_data)}")
 logger.info(f"Date range: {var_data.index.min()} to {var_data.index.max()}")
-logger.info(f"\nSeries statistics:")
+logger.info("\nSeries statistics:")
 logger.info(var_data.describe())
 
 from statsmodels.tsa.vector_ar.var_model import VAR
@@ -71,7 +71,7 @@ var_data_diff = var_data.diff().dropna()
 var_model = VAR(var_data_diff)
 var_fitted = var_model.fit(maxlags=4, ic='aic')
 
-logger.info(f"\nVAR Model Summary:")
+logger.info("\nVAR Model Summary:")
 logger.info(f"Selected lag order: {var_fitted.k_ar}")
 logger.info(f"\n{var_fitted.summary()}")
 
@@ -115,12 +115,12 @@ logger.info(f"  Emissions after 1 period: {irf.irfs[1, 2, 0]:.4f}")
 
 # Granger causality tests
 gc = var_fitted.test_causality('consumption', 'production', kind='f')
-logger.info(f"\nGranger Causality: consumption -> production")
+logger.info("\nGranger Causality: consumption -> production")
 logger.info(f"F-statistic: {gc.test_statistic:.4f}, p-value: {gc.pvalue:.4f}")
 logger.info(f"Causal: {'Yes' if gc.pvalue < 0.05 else 'No'}")
 
 gc2 = var_fitted.test_causality('production', 'emissions', kind='f')
-logger.info(f"\nGranger Causality: production -> emissions")
+logger.info("\nGranger Causality: production -> emissions")
 logger.info(f"F-statistic: {gc2.test_statistic:.4f}, p-value: {gc2.pvalue:.4f}")
 logger.info(f"Causal: {'Yes' if gc2.pvalue < 0.05 else 'No'}")
 
