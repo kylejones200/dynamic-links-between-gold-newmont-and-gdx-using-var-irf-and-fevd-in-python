@@ -14,7 +14,6 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 
 # Set random seeds
-np.random.seed(42)
 try:
     import tensorflow as tf
     tf.random.set_seed(42)
@@ -129,6 +128,7 @@ logger.info(f"\nForecast shape: {forecast_levels.shape}")
 
 # Code block 3
 from statsmodels.tsa.stattools import coint
+np.random.seed(42)
 
 # Test cointegration between pairs
 logger.info("Cointegration tests:")
