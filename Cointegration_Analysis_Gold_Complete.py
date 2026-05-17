@@ -2,7 +2,6 @@
 
 Magics and shell lines are commented out. Run with a normal Python interpreter."""
 
-
 # --- code cell ---
 
 import matplotlib.pyplot as plt
@@ -26,11 +25,9 @@ plt.tight_layout()
 plt.savefig("cointegration_series.png")
 plt.show()
 
-
 def adf_test(series, name):
     result = adfuller(series)
     print(f"{name} ADF Statistic: {result[0]:.4f}, p-value: {result[1]:.4f}")
-
 
 adf_test(df["Gold"], "Gold")
 adf_test(df["NEM"], "NEM")
@@ -64,7 +61,6 @@ plt.title("12-Month VECM Forecast")
 plt.savefig("vecm_forecast.png")
 plt.show()
 
-
 # First difference to make series stationary
 diff_df = df.diff().dropna()
 
@@ -97,7 +93,6 @@ plt.suptitle("Forecast Error Variance Decomposition (FEVD)")
 plt.savefig("var_fevd.png")
 plt.show()
 
-
 # --- code cell ---
 
 import matplotlib.pyplot as plt
@@ -108,12 +103,10 @@ from statsmodels.tsa.api import VAR
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.vector_ar.vecm import VECM, coint_johansen
 
-
 def fetch_data(symbols, start="2015-01-01", end="2024-12-31"):
     df = yf.download(symbols, start=start, end=end)["Close"].dropna()
     df.columns = ["HeatingOil", "CrudeOil"]
     return df
-
 
 def plot_series(df, filename="cointegration_series.png"):
     df.plot(title="Heating Oil vs Crude Oil Prices")
@@ -123,7 +116,6 @@ def plot_series(df, filename="cointegration_series.png"):
     plt.savefig(filename)
     plt.show()
 
-
 def adf_summary(df):
     for col in df.columns:
         result = adfuller(df[col])
@@ -131,20 +123,17 @@ def adf_summary(df):
         result_diff = adfuller(df[col].diff().dropna())
         print(f"{col} ΔADF: {result_diff[0]:.4f}, p={result_diff[1]:.4f}")
 
-
 def johansen_test(df):
     result = coint_johansen(df, det_order=0, k_ar_diff=1)
     print("Trace Statistic:", result.lr1)
     print("Critical Values (90%, 95%, 99%):\n", result.cvt)
     return result
 
-
 def fit_vecm(df, lags=1, rank=1):
     model = VECM(df, k_ar_diff=lags, coint_rank=rank)
     res = model.fit()
     print(res.summary())
     return res
-
 
 def forecast_vecm(res, df, steps=12):
     forecast = res.predict(steps=steps)
@@ -156,7 +145,6 @@ def forecast_vecm(res, df, steps=12):
     plt.title("12-Month VECM Forecast")
     plt.savefig("vecm_forecast.png")
     plt.show()
-
 
 def run_var_irf_fevd(df_diff, lags=1, horizon=12):
     model = VAR(df_diff)
@@ -180,7 +168,6 @@ def run_var_irf_fevd(df_diff, lags=1, horizon=12):
     plt.savefig("var_fevd.png")
     plt.show()
 
-
 def main():
     symbols = ["HO=F", "CL=F"]  # Heating Oil and Crude Oil
     df = fetch_data(symbols)
@@ -194,63 +181,15 @@ def main():
     df_diff = df.diff().dropna()
     run_var_irf_fevd(df_diff, lags=1, horizon=12)
 
-
 if __name__ == "__main__":
     main()
 
-
 # --- code cell ---
-
-
-def forecast_vecm(res, df, steps=12):
-    # Forecast differences
-    diffs = res.predict(steps=steps)
-    last_obs = df.iloc[-1].values
-
-    # Reconstruct levels from last observed value
-    forecast_levels = [last_obs]
-    for diff in diffs:
-        forecast_levels.append(forecast_levels[-1] + diff)
-    forecast_array = np.array(forecast_levels[1:])
-
-    # Create forecast DataFrame
-    future_idx = pd.date_range(
-        df.index[-1] + pd.DateOffset(months=1), periods=steps, freq="ME"
-    )
-    forecast_df = pd.DataFrame(forecast_array, columns=df.columns, index=future_idx)
-
-    # Plot forecast with historical context
-    ax = df[-100:].plot(figsize=(10, 5), label="Historical")
-    forecast_df.plot(ax=ax, style="--")
-    plt.title("12-Month VECM Forecast")
-    plt.savefig("vecm_forecast_corrected.png")
-    plt.show()
-
 
 # --- code cell ---
 
 forecast_vecm(vecm_res, df)
 
-
 # --- code cell ---
-
-
-def forecast_vecm(res, df, steps=12):
-    # Use simulate_var for stable multi-step forecasting
-    sim_forecast = res.simulate_var(steps=steps)
-
-    # Create datetime index
-    future_idx = pd.date_range(
-        start=df.index[-1] + pd.DateOffset(months=1), periods=steps, freq="ME"
-    )
-    forecast_df = pd.DataFrame(sim_forecast, columns=df.columns, index=future_idx)
-
-    # Plot historical and forecast
-    ax = df[-100:].plot(figsize=(10, 5), label="Historical")
-    forecast_df.plot(ax=ax, style="--")
-    plt.title("12-Month VECM Forecast")
-    plt.savefig("vecm_forecast_corrected_simulated.png")
-    plt.show()
-
 
 forecast_vecm(vecm_res, df)
