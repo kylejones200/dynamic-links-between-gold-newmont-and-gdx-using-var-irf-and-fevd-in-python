@@ -56,28 +56,30 @@ def plot_cumulative_irf(
     output_path: Path,
 ):
     """Plot cumulative impulse response functions"""
-    if plot:
-        fig, axes = plt.subplots(
-            len(response_vars), 1, figsize=(10, 4 * len(response_vars)), sharex=True
-        )
+    if not plot:
+        return
 
-        if len(response_vars) == 1:
-            axes = [axes]
+    fig, axes = plt.subplots(
+        len(response_vars), 1, figsize=(10, 4 * len(response_vars)), sharex=True
+    )
 
-        shock_idx = fitted_model.names.index(shock_var)
+    if len(response_vars) == 1:
+        axes = [axes]
 
-        for i, var in enumerate(response_vars):
-            var_idx = fitted_model.names.index(var)
-            irf_plot = irf.cum_effects[:, shock_idx, var_idx]
+    shock_idx = fitted_model.names.index(shock_var)
 
-            axes[i].plot(range(periods + 1), irf_plot, color="#4A90A4", linewidth=1.2)
-            axes[i].set_ylabel("Response")
-            axes[i].legend([f"{shock_var} → {var}"], loc="best")
+    for i, var in enumerate(response_vars):
+        var_idx = fitted_model.names.index(var)
+        irf_plot = irf.cum_effects[:, shock_idx, var_idx]
 
-        axes[-1].set_xlabel("Months")
+        axes[i].plot(range(periods + 1), irf_plot, color="#4A90A4", linewidth=1.2)
+        axes[i].set_ylabel("Response")
+        axes[i].legend([f"{shock_var} → {var}"], loc="best")
 
-        plt.savefig(output_path, dpi=100, bbox_inches="tight")
-        plt.close()
+    axes[-1].set_xlabel("Months")
+
+    plt.savefig(output_path, dpi=100, bbox_inches="tight")
+    plt.close()
 
 
 def plot_irf(irf, output_path: Path):

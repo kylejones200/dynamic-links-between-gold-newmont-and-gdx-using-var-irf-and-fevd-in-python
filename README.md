@@ -54,3 +54,11 @@ Edit `config.yaml` to customize:
 - All series must be stationary (log returns are used by default).
 - VAR models require sufficient data for reliable estimation.
 - Results are sensitive to lag selection and model specification.
+
+## Disclaimer
+
+Educational/demo code only. Not financial, safety, or engineering advice. Use at your own risk. Verify results independently before any production or operational use.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
