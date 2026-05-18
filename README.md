@@ -2,6 +2,14 @@
 
 This project demonstrates Vector Autoregression (VAR) modeling with Impulse Response Functions (IRF) and Forecast Error Variance Decomposition (FEVD) for analyzing dynamic relationships between financial time series.
 
+## Business context
+
+This project uses vector autoregressive models and Granger causality to examine the relationship between the price of gold futures (GC=F)...
+
+This project uses vector autoregressive models and Granger causality to examine the relationship between the price of gold futures (GC=F), Newmont Mining Corporation (NEM), and the VanEck Gold Miners ETF (GDX). My hypothesis is that the price of gold causes changes in the stock price for NEM and GDX.
+
+The daily data was too volatile to show anything interesting. So I resampled the daily data into a monthly format by taking mean closing price. This resampling reduces noise and focuses the analysis on medium-term dynamics. After resampling, I compute the log returns of each time series because they stabilize the variance and allow for easier interpretation of percentage changes over time.
+
 ## Article
 
 Medium article: [Dynamic Links Between Gold, Newmont, and GDX Using VAR, IRF, and FEVD](https://medium.com/@kylejones_47003/dynamic-links-between-gold-newmont-and-gdx-using-var-irf-and-fevd-in-python-a08658d8a074)
