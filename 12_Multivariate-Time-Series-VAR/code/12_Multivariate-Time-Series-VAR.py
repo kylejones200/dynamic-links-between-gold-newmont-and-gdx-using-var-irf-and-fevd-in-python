@@ -1,15 +1,18 @@
 import logging
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from statsmodels.tsa.stattools import adfuller, coint
+from statsmodels.tsa.vector_ar.var_model import VAR
 
 logger = logging.getLogger(__name__)
 
 # Extracted code from '12_Multivariate-Time-Series-VAR.md'
 # Blocks appear in the same order as in the markdown article.
 
-from pathlib import Path
 
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 
 BASE_DIR = Path(__file__).resolve().parents[1]
 
@@ -52,8 +55,6 @@ logger.info(f"Date range: {var_data.index.min()} to {var_data.index.max()}")
 logger.info("\nSeries statistics:")
 logger.info(var_data.describe())
 
-from statsmodels.tsa.stattools import adfuller
-from statsmodels.tsa.vector_ar.var_model import VAR
 
 
 # Check stationarity (VAR requires stationary data)
@@ -89,7 +90,6 @@ forecast_levels = var_data.iloc[-1:].values + np.cumsum(forecast, axis=0)
 
 logger.info(f"\nForecast shape: {forecast_levels.shape}")
 
-from statsmodels.tsa.stattools import coint
 
 # Test cointegration between pairs
 logger.info("Cointegration tests:")
@@ -152,7 +152,6 @@ for i, col in enumerate(var_data.columns):
         label="Historical",
         alpha=0.7,
     )
-
     # Forecast
     axes[i].plot(
         forecast_df.index,
@@ -162,7 +161,6 @@ for i, col in enumerate(var_data.columns):
         label="VAR Forecast",
         marker="o",
     )
-
     axes[i].axvline(var_data.index[-1], color="gray", linestyle=":", linewidth=1)
     axes[i].set_title(f"{col.capitalize()} Forecast", fontweight="bold")
     axes[i].set_ylabel(col.capitalize(), fontsize=11)

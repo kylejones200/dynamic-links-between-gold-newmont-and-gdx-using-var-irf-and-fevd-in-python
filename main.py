@@ -24,7 +24,7 @@ logging.basicConfig(
 )
 
 
-def load_config(config_path: Path = None) -> dict:
+def load_config(config_path: Path | None = None) -> dict:
     """Load configuration from YAML file."""
     if config_path is None:
         config_path = Path(__file__).parent / "config.yaml"
@@ -40,7 +40,6 @@ def main():
         "--output-dir", type=Path, default=None, help="Output directory for plots"
     )
     args = parser.parse_args()
-
     config = load_config(args.config)
     output_dir = (
         Path(args.output_dir)
@@ -48,16 +47,13 @@ def main():
         else Path(config["output"]["figures_dir"])
     )
     output_dir.mkdir(exist_ok=True)
-
     df = fetch_yfinance_data(
         config["data"]["tickers"],
         config["data"]["start_date"],
         config["data"]["end_date"],
     )
     df.columns = config["data"]["column_names"]
-
     log_returns = compute_log_returns(df, config["data"]["resample_freq"])
-
     for col in log_returns.columns:
         result = test_stationarity(log_returns[col], col)
         logging.info(

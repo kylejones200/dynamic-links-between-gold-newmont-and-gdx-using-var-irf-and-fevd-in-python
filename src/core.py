@@ -1,6 +1,5 @@
 """Core functions for VAR, IRF, and FEVD analysis."""
 
-import logging
 from pathlib import Path
 from typing import Dict, Tuple
 
@@ -9,10 +8,7 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from statsmodels.tsa.api import VAR
-from statsmodels.tsa.stattools import adfuller, grangercausalitytests
-
-# Configure logging
-logging.basicConfig(level=logging.INFO, format="%(message)s")
+from statsmodels.tsa.stattools import adfuller
 
 
 def fetch_yfinance_data(tickers: list, start: str, end: str) -> pd.DataFrame:
@@ -62,27 +58,23 @@ def plot_cumulative_irf(
     fig, axes = plt.subplots(
         len(response_vars), 1, figsize=(10, 4 * len(response_vars)), sharex=True
     )
-
     if len(response_vars) == 1:
         axes = [axes]
 
     shock_idx = fitted_model.names.index(shock_var)
-
     for i, var in enumerate(response_vars):
         var_idx = fitted_model.names.index(var)
         irf_plot = irf.cum_effects[:, shock_idx, var_idx]
-
         axes[i].plot(range(periods + 1), irf_plot, color="#4A90A4", linewidth=1.2)
         axes[i].set_ylabel("Response")
         axes[i].legend([f"{shock_var} → {var}"], loc="best")
 
     axes[-1].set_xlabel("Months")
-
     plt.savefig(output_path, dpi=100, bbox_inches="tight")
     plt.close()
 
 
-def plot_irf(irf, output_path: Path):
+def plot_irf(irf, output_path: Path, plot: bool = False):
     """Plot standard IRF"""
     irf.plot(orth=False)
     plt.tight_layout()
@@ -90,7 +82,7 @@ def plot_irf(irf, output_path: Path):
     plt.close()
 
 
-def plot_fevd(fevd, output_path: Path):
+def plot_fevd(fevd, output_path: Path, plot: bool = False):
     """Plot FEVD"""
     fevd.plot()
     plt.tight_layout()

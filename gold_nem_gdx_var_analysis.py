@@ -31,7 +31,6 @@ def check_stationarity(series, name):
     )
 
 
-
 def main():
     logging.info("\nMonthly Stationarity Tests:")
     for col in monthly_log_returns.columns:
@@ -40,30 +39,25 @@ def main():
     # --- Granger Causality Test: Gold → GDX ---
     logging.info("\nGranger Causality Test (Gold → GDX):")
     grangercausalitytests(monthly_log_returns[["GDX", "Gold"]], maxlag=3, verbose=True)
-
     # --- Fit VAR Model ---
     model = VAR(monthly_log_returns)
     lag_selection = model.select_order(12)
     selected_lag = lag_selection.aic
     fitted_model = model.fit(selected_lag)
-
     logging.info("\nVAR Model Summary:")
     logging.info(fitted_model.summary())
-
     # --- Impulse Response Functions ---
     irf = fitted_model.irf(12)
     irf.plot(orth=False)
     plt.tight_layout()
     plt.savefig("irf_plot.png")
     plt.show()
-
     # --- Forecast Error Variance Decomposition ---
     fevd = fitted_model.fevd(12)
     fevd.plot()
     plt.tight_layout()
     plt.savefig("fevd_plot.png")
     plt.show()
-
     # --- Plot cumulative IRFs for Gold shocks ---
     fig, axes = plt.subplots(3, 1, figsize=(10, 10), sharex=True)
     variables = ["GDX", "NEM", "Gold"]
@@ -76,7 +70,6 @@ def main():
     plt.tight_layout()
     plt.savefig("cumulative_irf_gold_shocks.png")
     plt.show()
-
     # --- Residual correlation matrix ---
     logging.info("\nResidual Correlation Matrix:")
     logging.info(fitted_model.resid.corr())

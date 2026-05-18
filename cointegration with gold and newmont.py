@@ -18,13 +18,10 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 def get_data():
     # Get Newmont (NEM) data
     nem = yf.download("NEM", start="2020-01-01", end=datetime.now())
-
     # Get Gold prices (Continuous Futures)
     gold = yf.download("GC=F", start="2020-01-01", end=datetime.now())
-
     # Create DataFrame with closing prices
     data = pd.DataFrame({"NEM": nem["Close"], "Gold": gold["Close"]})
-
     return data
 
 
@@ -139,14 +136,12 @@ def get_data():
     gold = yf.download(
         "GC=F", start="2020-01-01", end=datetime.now(), auto_adjust=False
     )
-
     # If there's no data, raise an error or handle accordingly
     if nem.empty or gold.empty:
         raise ValueError("No data returned. Check the symbol or date range.")
 
     # Create DataFrame with the old 'Close' columns
     data = pd.DataFrame({"NEM": nem["Close"], "Gold": gold["Close"]})
-
     return data
 
 
@@ -167,10 +162,8 @@ def get_data():
     gold = yf.download(
         "GC=F", start="2020-01-01", end=datetime.now(), auto_adjust=False
     )
-
     logging.info("NEM columns:", nem.columns)
     logging.info("Gold columns:", gold.columns)
-
     if nem.empty or gold.empty:
         raise ValueError("No data returned. Check the ticker or date range.")
 
@@ -189,10 +182,8 @@ logging.info("Head of data:\n", data.head())
 def get_data():
     start_date = datetime.now() - pd.DateOffset(years=5)
     end_date = datetime.now()
-
     nem = yf.download("NEM", start=start_date, end=end_date, auto_adjust=False)
     gold = yf.download("GC=F", start=start_date, end=end_date, auto_adjust=False)
-
     # Basic checks
     if nem.empty or gold.empty:
         raise ValueError("One of the datasets is empty. Check symbols or date range.")
@@ -202,7 +193,6 @@ def get_data():
         raise ValueError("'Close' column missing. Check data structure.")
 
     data = pd.DataFrame({"NEM": nem["Close"], "Gold": gold["Close"]})
-
     return data
 
 
@@ -436,7 +426,6 @@ plt.grid(False)
 plt.tight_layout()
 plt.show()
 
-
 # --- Step 1: Resample to Monthly and Compute Log Returns ---
 
 monthly_data = data.resample("ME").last()  # Use 'ME' to avoid future warning
@@ -499,7 +488,6 @@ ax.set_title("Forecast Error Variance Decomposition of GDX", fontsize=14)
 plt.tight_layout()
 plt.show()
 
-
 fevd = fitted_model.fevd(12)
 
 # Get the variance decomposition array (shape: [steps, variables])
@@ -526,7 +514,6 @@ def plot_fevd_stacked(fevd, target_var, labels=None, plot: bool = False):
     idx = fitted_model.names.index(target_var)
     decomp = fevd.decomp[:, idx, :]  # shape: (time, sources)
     months = np.arange(1, decomp.shape[0] + 1)
-
     if plot:
         plt.figure(figsize=(10, 6))
         plt.stackplot(months, decomp.T, labels=labels or fitted_model.names)
@@ -556,7 +543,6 @@ for target in ["NEM_NEM", "Gold_GC=F", "GDX_GDX"]:
     plt.grid(False)
     plt.tight_layout()
     plt.show()
-
 
 # Compute IRF and extract orthogonalized impulse responses
 irf = fitted_model.irf(12)

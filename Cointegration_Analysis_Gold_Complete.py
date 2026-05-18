@@ -95,109 +95,60 @@ def run_var_irf_fevd(df_diff, lags=1, horizon=12):
     plt.show()
 
 
-def main() -> None:
+def main_alt() -> None:
     symbols = ["HO=F", "CL=F"]
-
     df = yf.download(symbols, start="2015-01-01", end="2024-12-31")["Close"]
-
     df.dropna(inplace=True)
-
     df.columns = ["Gold", "NEM"]
-
     df.plot(title="Gold vs Newmont")
-
     plt.ylabel("Price")
-
     plt.xlabel("Date")
-
     plt.tight_layout()
-
     plt.savefig("cointegration_series.png")
-
     plt.show()
-
     adf_test(df["Gold"], "Gold")
-
     adf_test(df["NEM"], "NEM")
-
     adf_test(df["Gold"].diff().dropna(), "Gold Δ")
-
     adf_test(df["NEM"].diff().dropna(), "NEM Δ")
-
     jres = coint_johansen(df, det_order=0, k_ar_diff=1)
-
     trace_stat = jres.lr1
-
     crit_values = jres.cvt
-
     print("Trace Statistic:", trace_stat)
-
     print("Critical Values (90%, 95%, 99%):\n", crit_values)
-
     vecm_model = VECM(df, k_ar_diff=1, coint_rank=1)
-
     vecm_res = vecm_model.fit()
-
     print(vecm_res.summary())
-
     forecast = vecm_res.predict(steps=12)
-
     forecast_df = pd.DataFrame(
         forecast,
         columns=["Gold", "NEM"],
         index=pd.date_range(df.index[-1], periods=12, freq="M"),
     )
-
     df[-100:].plot(figsize=(10, 5), label="Historical")
-
     forecast_df.plot(ax=plt.gca(), style="--")
-
     plt.title("12-Month VECM Forecast")
-
     plt.savefig("vecm_forecast.png")
-
     plt.show()
-
     diff_df = df.diff().dropna()
-
     model = VAR(diff_df)
-
     var_res = model.fit(maxlags=1)
-
     print(var_res.summary())
-
     irf = var_res.irf(12)
-
     irf.plot(orth=False)
-
     plt.suptitle("VAR IRFs (Standard)")
-
     plt.savefig("var_irf_standard.png")
-
     plt.show()
-
     irf.plot(orth=True)
-
     plt.suptitle("VAR IRFs (Orthogonalized)")
-
     plt.savefig("var_irf_orthogonalized.png")
-
     plt.show()
-
     fevd = var_res.fevd(12)
-
     fevd.plot()
-
     plt.suptitle("Forecast Error Variance Decomposition (FEVD)")
-
     plt.savefig("var_fevd.png")
-
     plt.show()
-
     main()
-
     forecast_vecm(vecm_res, df)
-
     forecast_vecm(vecm_res, df)
 
 
