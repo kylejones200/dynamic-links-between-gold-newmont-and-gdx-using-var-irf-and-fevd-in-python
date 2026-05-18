@@ -15,6 +15,9 @@ from src.core import (
     compute_log_returns,
     fetch_yfinance_data,
     fit_var_model,
+    plot_cumulative_irf,
+    plot_fevd,
+    plot_irf,
     test_stationarity,
 )
 from statsmodels.tsa.stattools import grangercausalitytests
@@ -33,7 +36,7 @@ def load_config(config_path: Path | None = None) -> dict:
         return yaml.safe_load(f)
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="VAR, IRF, and FEVD Analysis")
     parser.add_argument("--config", type=Path, default=None, help="Path to config file")
     parser.add_argument(
@@ -74,30 +77,30 @@ def main():
             except Exception as e:
                 logging.error(f": {e}")
 
-        model, fitted_model = fit_var_model(log_returns, config["model"]["max_lag"])
+    _model, fitted_model = fit_var_model(log_returns, config["model"]["max_lag"])
 
     logging.info(f"\nVAR Model Summary (Selected Lag: {fitted_model.k_ar}):")
     logging.info(fitted_model.summary())
+    logging.info(fitted_model.resid.corr())
 
+    irf = fitted_model.irf(config["analysis"]["irf"]["periods"])
+    plot_irf(irf, output_dir / "irf_plot.png", plot=True)
 
-logging.info(fitted_model.resid.corr())
+    fevd = fitted_model.fevd(config["analysis"]["fevd"]["periods"])
+    plot_fevd(fevd, output_dir / "fevd_plot.png", plot=True)
 
-irf = fitted_model.irf(config["analysis"]["irf"]["periods"])
-plot_irf(irf, output_dir / "irf_plot.png")
+    plot_cumulative_irf(
+        irf,
+        fitted_model,
+        config["output"]["cumulative_irf_shock"],
+        config["output"]["cumulative_irf_responses"],
+        config["analysis"]["irf"]["periods"],
+        output_dir / "cumulative_irf_gold_shocks.png",
+        plot=True,
+    )
 
-fevd = fitted_model.fevd(config["analysis"]["fevd"]["periods"])
-plot_fevd(fevd, output_dir / "fevd_plot.png")
+    logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
 
-plot_cumulative_irf(
-    irf,
-    fitted_model,
-    config["output"]["cumulative_irf_shock"],
-    config["output"]["cumulative_irf_responses"],
-    config["analysis"]["irf"]["periods"],
-    output_dir / "cumulative_irf_gold_shocks.png",
-)
-
-logging.info(f"\nAnalysis complete. Figures saved to {output_dir}")
 
 if __name__ == "__main__":
     main()
