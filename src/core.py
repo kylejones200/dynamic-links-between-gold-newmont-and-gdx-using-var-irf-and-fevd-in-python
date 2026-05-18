@@ -32,7 +32,7 @@ def fit_var_model(data: pd.DataFrame, max_lag: int=12) -> Tuple[VAR, Any]:
     fitted_model = model.fit(selected_lag)
     return (model, fitted_model)
 
-def plot_cumulative_irf(irf, fitted_model, shock_var: str, response_vars: list, periods: int, output_path: Path, plot: bool = False):
+def plot_cumulative_irf(irf, fitted_model, shock_var: str, response_vars: list, periods: int, output_path: Path, plot: bool=False):
     """Plot cumulative impulse response functions"""
     if not plot:
         return
