@@ -1,0 +1,9 @@
+[package]
+name = "dynamic_links_between_gold_newmont_and_gdx_using_var_irf_and_fevd_in_python_core"
+description = "VAR(1) impulse response function"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+path = "src/lib.rs"

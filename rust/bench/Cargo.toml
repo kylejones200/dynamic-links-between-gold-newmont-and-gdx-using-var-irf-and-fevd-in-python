@@ -1,0 +1,13 @@
+[package]
+name = "dynamic_links_between_gold_newmont_and_gdx_using_var_irf_and_fevd_in_python_bench"
+description = "Standalone Rust benchmark (no Python)"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "bench"
+path = "src/main.rs"
+
+[dependencies]
+dynamic_links_between_gold_newmont_and_gdx_using_var_irf_and_fevd_in_python_core = { path = "../core" }

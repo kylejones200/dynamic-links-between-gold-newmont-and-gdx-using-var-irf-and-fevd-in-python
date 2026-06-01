@@ -1,0 +1,15 @@
+[package]
+name = "dynamic_links_between_gold_newmont_and_gdx_using_var_irf_and_fevd_in_python_rs"
+description = "Python bindings (PyO3) for dynamic_links_between_gold_newmont_and_gdx_using_var_irf_and_fevd_in_python_core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "dynamic_links_between_gold_newmont_and_gdx_using_var_irf_and_fevd_in_python_rs"
+crate-type = ["cdylib"]
+
+[dependencies]
+dynamic_links_between_gold_newmont_and_gdx_using_var_irf_and_fevd_in_python_core = { path = "../core" }
+pyo3 = { version = "0.28", features = ["extension-module"] }
+numpy = "0.28"
